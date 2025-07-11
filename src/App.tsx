@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Home, User, Code, Briefcase, GraduationCap, Mail, Download, Github, Linkedin, ExternalLink, Pocket as Docker, Server, Cloud, Terminal, Settings, GitBranch, Database, Shield, Cpu, Monitor, FileCode, Phone, MapPin, CheckCircle, Users, Rocket, Wrench, Play, Eye } from 'lucide-react';
+import { Menu, X, Home, User, Code, Briefcase, GraduationCap, Mail, Download, Github, Linkedin, Pocket as Docker, Server, Cloud, Terminal, Settings, GitBranch, Database, Shield, Cpu, Monitor, FileCode, Phone, MapPin, CheckCircle, Rocket, Wrench, Play, Eye } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -278,7 +278,7 @@ function App() {
       );
     }, typeSpeed);
     return () => clearTimeout(timeout);
-  }, [typingText, isDeleting, typingIndex]);
+  }, [typingText, isDeleting, typingIndex, typingRoles]);
 
   if (isLoading) {
     return (
@@ -450,7 +450,7 @@ function App() {
               <div className="relative w-80 h-80 flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400 via-pink-500 to-lime-400 opacity-60 blur-2xl animate-spin-slow"></div>
                 <div className="group w-72 h-72 rounded-full border-4 border-cyan-400 shadow-2xl bg-slate-900 overflow-hidden flex items-center justify-center animate-float">
-                  <img src="src/assets/hero.jpg" alt="Priyam Sanodiya" className="w-full h-full object-cover rounded-full transform transition-transform duration-500 group-hover:scale-110" />
+                  <img src="./src/hero.jpg" alt="Priyam Sanodiya" className="w-full h-full object-cover rounded-full transform transition-transform duration-500 group-hover:scale-110" />
                 </div>
                 {/* Floating DevOps Tool Icons - left and right of hero image */}
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 p-2 bg-white/10 rounded-full shadow-lg animate-bounce">
@@ -689,7 +689,7 @@ function App() {
               <div className="relative">
                 <div className="w-full h-80 rounded-2xl overflow-hidden shadow-2xl">
                   <img 
-                    src=".\src\assets\collage.jpg" 
+                    src="/src/collage.jpg" 
                     alt="AKS University" 
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
@@ -869,44 +869,7 @@ function App() {
         </div>
       </footer>
 
-      <style jsx>{`
-        .typing-animation {
-          overflow: hidden;
-          border-right: 2px solid #00b4d8;
-          white-space: nowrap;
-          animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
 
-        @keyframes typing {
-          from { width: 0 }
-          to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-          from, to { border-color: transparent }
-          50% { border-color: #00b4d8 }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) }
-          50% { transform: translateY(-20px) }
-        }
-
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        .animate-float-slow {
-          animation: float-slow 6s ease-in-out infinite;
-        }
-        .animate-spin-slow {
-          animation: spin 12s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
