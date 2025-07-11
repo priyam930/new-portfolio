@@ -450,7 +450,7 @@ function App() {
               <div className="relative w-80 h-80 flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400 via-pink-500 to-lime-400 opacity-60 blur-2xl animate-spin-slow"></div>
                 <div className="group w-72 h-72 rounded-full border-4 border-cyan-400 shadow-2xl bg-slate-900 overflow-hidden flex items-center justify-center animate-float">
-                  <img src="./src/assets/hero.jpg" alt="Priyam Sanodiya" className="w-full h-full object-cover rounded-full transform transition-transform duration-500 group-hover:scale-110" />
+                  <img src="./assets/hero.jpg" alt="Priyam Sanodiya" className="w-full h-full object-cover rounded-full transform transition-transform duration-500 group-hover:scale-110" />
                 </div>
                 {/* Floating DevOps Tool Icons - left and right of hero image */}
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 p-2 bg-white/10 rounded-full shadow-lg animate-bounce">
