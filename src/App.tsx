@@ -1,13 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, Home, User, Code, Briefcase, GraduationCap, Mail, Download, Github, Linkedin, Pocket as Docker, Server, Cloud, Terminal, Settings, GitBranch, Database, Shield, Cpu, Monitor, FileCode, Phone, MapPin, CheckCircle, Rocket, Wrench, Play, Eye } from 'lucide-react';
+import { Menu, X, Home, User, Code, Briefcase, GraduationCap, Mail, Download, Github, Linkedin, Pocket as Docker, Server, Cloud, Terminal, Settings, GitBranch, Database, Shield, Cpu, Monitor, FileCode, Phone, MapPin, CheckCircle, Rocket, Wrench, Play, Eye, Loader2 } from 'lucide-react';
 import heroImg from './assets/hero.jpg';
 import collageImg from './assets/collage.jpg';
+import emailjs from 'emailjs-com';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoading, setIsLoading] = useState(true);
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    company: '',
+    subject: '',
+    message: ''
+  });
+  const [contactStatus, setContactStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
   const heroRef = useRef<HTMLDivElement>(null);
   const particlesRef = useRef<HTMLCanvasElement>(null);
 
@@ -177,6 +190,72 @@ function App() {
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     setIsMenuOpen(false);
+  };
+
+  // Contact form handling
+  const handleContactInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setContactForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactLoading(true);
+    setContactStatus({ type: null, message: '' });
+
+    try {
+      // Initialize EmailJS with your credentials
+      emailjs.init("VFJChot3zvBoEpCKl");
+
+      const templateParams = {
+        name: contactForm.name,
+        email: contactForm.email,
+        company: contactForm.company,
+        subject: contactForm.subject,
+        message: contactForm.message,
+        timestamp: new Date().toLocaleString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          timeZoneName: 'short'
+        })
+      };
+
+      await emailjs.send(
+        "service_4o21ql9",
+        "template_pbnz3md",
+        templateParams
+      );
+
+      setContactStatus({
+        type: 'success',
+        message: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!'
+      });
+
+      // Reset form
+      setContactForm({
+        name: '',
+        email: '',
+        company: '',
+        subject: '',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Email sending failed:', error);
+      setContactStatus({
+        type: 'error',
+        message: 'Sorry, there was an error sending your message. Please try again or contact me directly at priyamsanodiya340@gmail.com'
+      });
+    } finally {
+      setContactLoading(false);
+    }
   };
 
   const projects = [
@@ -803,36 +882,121 @@ function App() {
                 </div>
               </div>
               
-              <div className="bg-slate-800/60 backdrop-blur-md border border-pink-500/30 rounded-2xl p-4 sm:p-6 md:p-8 relative overflow-hidden">
-                <form className="space-y-6">
-                  <div>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
-                    />
+              <div className="bg-slate-800/60 backdrop-blur-md border border-cyan-400/30 rounded-2xl shadow-xl p-8 relative overflow-hidden">
+                <div className="text-center mb-8">
+                  <h3 className="text-3xl font-bold text-white mb-4">Send Me a Message</h3>
+                  <p className="text-slate-300 text-lg">
+                    Whether you have a job opportunity, project idea, or just want to connect, I'd love to hear from you!
+                  </p>
+                </div>
+                
+                {/* Status Message */}
+                {contactStatus.type && (
+                  <div className={`mb-6 p-4 rounded-xl ${
+                    contactStatus.type === 'success' 
+                      ? 'bg-green-500/20 border border-green-500/30 text-green-300' 
+                      : 'bg-red-500/20 border border-red-500/30 text-red-300'
+                  }`}>
+                    {contactStatus.message}
                   </div>
-                  <div>
-                    <input
-                      type="email"
-                      placeholder="Your Email"
-                      className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
-                    />
+                )}
+                
+                <form onSubmit={handleContactSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-slate-200 font-medium mb-2">
+                        Your Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={contactForm.name}
+                        onChange={handleContactInputChange}
+                        placeholder="John Doe"
+                        className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-200 font-medium mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={contactForm.email}
+                        onChange={handleContactInputChange}
+                        placeholder="john@company.com"
+                        className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
+                        required
+                      />
+                    </div>
                   </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-slate-200 font-medium mb-2">
+                        Company/Organization
+                      </label>
+                      <input
+                        type="text"
+                        name="company"
+                        value={contactForm.company}
+                        onChange={handleContactInputChange}
+                        placeholder="Your Company"
+                        className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-200 font-medium mb-2">
+                        Subject *
+                      </label>
+                      <input
+                        type="text"
+                        name="subject"
+                        value={contactForm.subject}
+                        onChange={handleContactInputChange}
+                        placeholder="Job Opportunity / Project Discussion"
+                        className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
                   <div>
+                    <label className="block text-slate-200 font-medium mb-2">
+                      Message *
+                    </label>
                     <textarea
+                      name="message"
+                      value={contactForm.message}
+                      onChange={handleContactInputChange}
                       rows={5}
-                      placeholder="Your Message"
+                      placeholder="Tell me about the opportunity, project requirements, or what you'd like to discuss..."
                       className="w-full p-4 bg-slate-700/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-[#00b4d8] focus:ring-2 focus:ring-[#00b4d8]/20 transition-all duration-300 resize-none"
+                      required
                     />
                   </div>
+                  
                   <button
                     type="submit"
-                    className="w-full md:w-auto bg-gradient-to-r from-cyan-400 to-pink-500 text-white py-3 md:py-4 px-8 rounded-xl font-semibold hover:shadow-lg hover:shadow-cyan-400/25 transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    disabled={contactLoading}
+                    className="w-full bg-gradient-to-r from-[#00b4d8] to-[#ff3c77] text-white py-4 px-8 rounded-xl font-semibold hover:shadow-lg hover:shadow-[#00b4d8]/25 transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
                     aria-label="Send Message"
                   >
-                    {/* contactLoading is not defined in this component, so this will always show the default state */}
-                    <Mail className="w-5 h-5" /> Send Message
+                    {contactLoading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                        Send Message
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
