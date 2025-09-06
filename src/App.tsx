@@ -586,6 +586,17 @@ function App() {
                   💡 I'm eager to join forward-thinking teams where I can grow, contribute to impactful projects, and help design 
                   automated, reliable DevOps pipelines that drive innovation.
                 </p>
+                <div className="mt-8">
+                  <a
+                    href="https://drive.google.com/file/d/1TtqDJqAlqVOim0cLTn4qE0d-UMA1gd9l/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-gradient-to-r from-[#00b4d8] to-[#ff3c77] text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-[#00b4d8]/25 transition-all duration-300 transform hover:scale-105 animate-pulse"
+                  >
+                    <Download className="w-5 h-5" />
+                     Resume
+                  </a>
+                </div>
               </div>
               
               <div className="space-y-6">
